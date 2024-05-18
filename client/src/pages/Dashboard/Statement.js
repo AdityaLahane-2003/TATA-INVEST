@@ -86,23 +86,23 @@ const Statement = () => {
             <div className="summary-box">
                 <div className="summary-item">
                     <p className="item-label">Invested Amount:</p>
-                    <p className="item-value">₹ {investedAmount}</p>
+                    <p className="item-value">₹ {investedAmount || 0}</p>
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Interest Income:</p>
-                    <p className="item-value">₹ {userData?.interestAmount}</p>
+                    <p className="item-value">₹ {userData?.interestAmount || 0}</p>
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Referral Income:</p>
-                    <p className="item-value">₹ {referralAmount}</p>
+                    <p className="item-value">₹ {referralAmount || 0}</p>
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Life Time Earning:</p>
-                    <p className="item-value">₹ {referralAmount + userData?.interestAmount}</p>
+                    <p className="item-value">₹ {referralAmount + (userData?.interestAmount || 0)}</p>
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Balance Withdrawable:</p>
-                    <p className="item-value">₹ {userData?.withdrawableAmount}</p>
+                    <p className="item-value">₹ {userData?.withdrawableAmount || 0}</p>
                 </div>
             </div>
 

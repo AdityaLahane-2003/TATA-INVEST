@@ -1,106 +1,165 @@
-.profile-section {
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
-  }
-  
-  .kyc-card {
-    width: 50%;
-    display: flex;
-    margin: 0 auto;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 20px;
-    border-radius: 5px;
-    color: rgb(97, 92, 226);
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 5px 3px 5px rgba(0, 0, 0, 0.1);
-  }
-  .kyc-card h6 {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  p {
-    font-size: 13px;
-  }
-  
-  .account-details {
-    margin: 0 auto;
-    padding:15px 2px;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .account-details h2 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  
-  .account-details ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .account-details li {
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .account-details li i {
-    margin-right: 10px;
-    color: #007bff;
-  }
-  
-  .action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-  
-  .action-buttons button {
-    margin-left: 10px;
-  }
-  
-  /* Media query for mobile responsiveness (adjust as needed) */
-  
-  @media (max-width: 768px) {
-    .profile-section {
-      width: 90%;
-    }
-
-    .kyc-card{
-      width: auto;
-      padding: 2px;
-    }
-    .kyc-card,
-    .action-buttons button {
-      font-size: 14px;
-    }
-  }
-
-.list-group {
-  align-items: center; 
-  }
-.list-group-item {
-    border-radius: 10px;
-    padding: 15px;
-    width: 400px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 20px;
-    font-weight: bold;
-    align-items: left;
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #f0f4f8;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
-    .list-group-item {
-        width: 100%; 
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
+.loading, .no-user {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-header h1 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+}
+
+.profile-header h2 {
+  font-size: 20px;
+  color: #555;
+}
+
+.kyc-status {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.kyc-done {
+  background-color: #e0f7e4;
+  color: #2e7d32;
+}
+
+.kyc-pending {
+  background-color: #ffe0e0;
+  color: #c62828;
+  text-decoration: none;
+}
+
+.kyc-status i {
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.kyc-status h6 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.kyc-status p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.kyc-verification {
+  display: flex;
+  align-items: center;
+}
+
+
+.user-details {
+  margin-bottom: 20px;
+}
+
+.user-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.user-details li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  color: #555;
+}
+
+.user-details li i {
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.copy-icon, .share-icon {
+  margin-left: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.copy-icon:hover, .share-icon:hover {
+  color: #007bff;
+}
+
+.copied {
+  color: green;
+}
+
+.kyc-status.done {
+  color: green;
+}
+
+.kyc-status.pending {
+  color: red;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.action-buttons .btn {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger {
+  background-color: #e53935;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #b71c1c;
+}
+
+.btn-primary {
+  background-color: #1e88e5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #1565c0;
+}
+
+.btn-link {
+  color: inherit;
+  text-decoration: none;
+  margin-left: 10px;
 }

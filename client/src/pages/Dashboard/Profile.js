@@ -8,8 +8,10 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [bankDetailsVisible, setBankDetailsVisible] = useState(false);
 
-  const history = useNavigate();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchedUser = localStorage.getItem('userId');
@@ -18,6 +20,7 @@ const ProfilePage = () => {
         .then((userData) => {
           if (userData) {
             setUser(userData);
+            setBankDetailsVisible(userData.kycDone); // Show bank details only if KYC is done
           } else {
             console.log('User not found');
           }
@@ -28,16 +31,16 @@ const ProfilePage = () => {
           setLoading(false);
         });
     } else {
-      history('/login');
+      navigate('/login');
     }
-  }, [history]);
+  }, [navigate]);
 
   const handleDeleteUserAccount = () => {
     if (window.confirm('Are you sure you want to delete your account?')) {
       handleDeleteAccount()
         .then(() => {
           localStorage.removeItem('userId');
-          history('/login');
+          navigate('/login');
         })
         .catch((error) => {
           console.log('Error deleting user account:', error);
@@ -55,98 +58,84 @@ const ProfilePage = () => {
 
   const shareOnWhatsApp = () => {
     const message = `Get daily 1.2% returns on investments at Tatainvest! 💰 Invest now for hassle-free earnings. Click on this link - https://tatainvest.org/signup?referralCode=${user.referralCode}`;
-    // Construct the WhatsApp URL
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.location.href = whatsappUrl;
-};
-// nst shareOnFacebook = () => {
-//   // Implement sharing on Facebook
-//   const message = 
-//   `Get daily 1.2% returns on investments at Tatainvest! 💰 Invest now for hassle-free earnings. Use my referral code : ${user.referralCode}`;
+  };
 
-//   const encodedMessage = encodeURIComponent(message);
-//   const shareUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodedMessage}`;
-
-//   const handleShareClick = () => {
-//     window.open(shareUrl, '_blank');
-//   };
-
-// };
-
-
-
-//   const shareOnInstagram = () => {
-//     const message = 
-//       `Get daily 1.2% returns on investments at Tatainvest! 💰 Invest now for hassle-free earnings. Use my referral code : ${user.referralCode}`;
-//     const referralText = `Get daily 1.2% returns on investments at Tatainvest! 💰 Invest now for hassle-free earnings. Use my referral code : ${user.referralCode}`;
-//     const referralLink = `https://www.instagram.com/?text=${encodeURIComponent(referralText)}`;
-//     window.open(referralLink, '_blank');
-//   };
-
-//   const shareOnLinkedIn = () => {
-//     const message = 
-//       `Get daily 1.2% returns on investments at Tatainvest! 💰 Invest now for hassle-free earnings. Use my referral code : ${user.referralCode}`;
-//     const encodedMessage = encodeURIComponent(message);
-//     const linkedinInboxURL = `https://www.linkedin.com/messaging/?subject=${encodedMessage}`;
-//     window.open(linkedinInboxURL, '_blank');
-
-//   };
   return (
-    <div className="container mt-5 mb-5">
+    <div className="profile-container">
       {loading ? (
-        <p className="text-center">Loading user data...</p>
+        <p className="loading">Loading user data...</p>
       ) : user ? (
-        <div className="profile-section">
-          {user.kycDone ? <div className="kyc-card">
-            <i className="fa fa-check" style={{ fontSize: '25px' }}></i>
-            <div className='card-content-kyc'>
-              <h6>KYC Done</h6>
-              <p>Can Start borrowing @ 1.2% daily</p>
+        <div className="profile-card">
+          <div className="profile-header">
+            <h1>Welcome, {user.name}!</h1>
+            <h2>Account Details</h2>
+          </div>
+          {user.kycDone ? (
+            <div className="kyc-status kyc-done">
+              <i className="fas fa-check-circle"></i>
+              <center>
+                <h6>KYC Completed</h6>
+                <p>You can start borrowing at 1.2% daily</p>
+              </center>
             </div>
-          </div>
-            :
-            <Link to="/kyc" className="kyc-card">
-              <i className="fa fa-exclamation-circle" style={{ fontSize: '25px' }}></i>
-              <div className="card-content-kyc">
+          ) : (
+            <Link to="/kyc" className="kyc-status kyc-pending">
+              <i className="fas fa-exclamation-circle"></i>
+              <div>
                 <h6>Complete Your KYC</h6>
-                <p>Start borrowing @ 1.2% daily</p>
+                <p>Start borrowing at 1.2% daily</p>
               </div>
-              <i className="fas fa-chevron-right" style={{ fontSize: '25px' }}></i>
+              <i className="fas fa-chevron-right"></i>
             </Link>
-          }
-
-          <div className="account-details text-center">
-            <h1>Hi {user.name} !</h1>
-            <h1>Account</h1>
-            <ul class="list-group" >
-              <li className="list-group-item" >
-                <div>
-                  <i className="fas fa-phone" style={{ color: "rgba(135, 132, 220, 1)" }}></i> Phone Number: {user.phone}
-                </div>
+          )}
+          <div className="user-details">
+            <ul>
+              <li>
+                <i className="fas fa-phone"></i> Phone Number: {user.phone}
               </li>
-              <li className="list-group-item">  <div>
-                <i className="fas fa-calendar" style={{ color: "rgba(135, 132, 220, 1)" }}></i> Referral Code :  {copied ? <i className="fas fa-check-circle"></i> : <i className="far fa-copy" onClick={copyReferralCode}></i>}
-                {/* Add social media icons for sharing */}
-                <i className="fab fa-whatsapp" onClick={shareOnWhatsApp}></i>
-                {/* <i className="fab fa-facebook" onClick={shareOnFacebook}></i>
-                <i className="fab fa-instagram" onClick={shareOnInstagram}></i>
-                <i className="fab fa-linkedin" onClick={shareOnLinkedIn}></i> */}
-              </div></li>
-              <li className="list-group-item"> <div>
-                <i className="fas fa-user" style={{ color: "rgba(135, 132, 220, 1)" }}></i> KYC Verification:{" "}
-                {user.kycDone ? <i className="fas fa-check-circle" style={{ color: "green" }}>Done</i> : <i className="fas fa-exclamation-circle" style={{ color: "red" }}></i>}
-              </div></li>
+              <li>
+                <i className="fas fa-envelope"></i> Email: {user.email}
+              </li>
+              <li>
+                <i className="fas fa-calendar"></i> Referral Code: 
+                {copied ? (
+                  <i className="fas fa-check-circle copied"></i>
+                ) : (
+                  <i className="far fa-copy copy-icon" onClick={copyReferralCode}></i>
+                )}
+                <i className="fab fa-whatsapp share-icon" onClick={shareOnWhatsApp}></i>
+              </li>
             </ul>
-
           </div>
+          {bankDetailsVisible && (
+            <>
+            <div className='profile-header'>
+              <h2>Bank Account Details</h2>
+            </div>
+            <div className="bank-details">
+            <ul>
+              <li>
+                <i className="fas fa-phone"></i> Bank Account No.: {user.accountNumber}
+              </li>
+              <li>
+                <i className="fas fa-envelope"></i> IFSC Code: {user.ifscCode}
+              </li>
+              <li>
+                <i className="fas fa-envelope"></i> Account Holder Name: {user.cardHolderName}
+              </li>
+            </ul>
+            </div></>
+          )}
 
           <div className="action-buttons">
             <ActionButton onClick={handleDeleteUserAccount} text="Delete Account" iconClass="fas fa-trash" color="danger" />
-            <ActionButton to="/updateinfo" text="Update Info" iconClass="fas fa-edit" color="blue" />
+            <ActionButton to={`/updateinfo/${user.referralCode}`} text="Update Info" iconClass="fas fa-edit" color="primary" />
           </div>
         </div>
       ) : (
-        <p className="text-center">No user data found.</p>
+        <p className="no-user">No user data found.</p>
       )}
     </div>
   );
@@ -155,8 +144,8 @@ const ProfilePage = () => {
 export default ProfilePage;
 
 const ActionButton = ({ onClick, to, iconClass, text, color }) => (
-  <button className={`btn btn-${color} me-2`} onClick={onClick}>
+  <button className={`btn btn-${color}`} onClick={onClick}>
     <i className={iconClass}></i>
-    {to ? <Link to={to} className="ms-2">{text}</Link> : <span className="ms-2">{text}</span>}
+    {to ? <Link to={to} className="btn-link">{text}</Link> : <span>{text}</span>}
   </button>
 );

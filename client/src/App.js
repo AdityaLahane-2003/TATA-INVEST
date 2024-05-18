@@ -94,7 +94,7 @@ function App() {
           <>
             <Route path="/dashboard" element={<DashboardScreen />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/updateinfo" element={<UpdateInfo />} />
+            <Route path="/updateinfo/:referralCode" element={<UpdateInfo />} />
             <Route path="/statement" element={<Statement />} />
             <Route path='/kyc' element={<Kyc />} />
             <Route path="/kyc-step1" element={<Step1Form />} />

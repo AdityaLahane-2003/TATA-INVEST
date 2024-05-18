@@ -3,13 +3,19 @@ import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from './Skeletons/SkeletonAdmin.js';
+import { db } from "../../Firebase/config.js";
+import { getDoc, doc } from "firebase/firestore";
 import './admin.css';
+
 
 export default function AdminDashboard() {
     const [usersData, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedUserTransactions, setSelectedUserTransactions] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(true); // Add loading state
+    const [loadingTransactions, setLoadingTransactions] = useState(false);
+
     const history = useNavigate();
 
     useEffect(() => {
@@ -42,10 +48,13 @@ export default function AdminDashboard() {
         return diffInTime / (1000 * 3600 * 24);
     };
 
-    const handleUserClick = (user) => {
+    const handleUserClick = async (user) => {
+        console.log("User clicked:", user); // Check if this message appears in the console
         setSelectedUser(user);
+        await fetchTransactions(user);
         setShowModal(true);
     };
+    
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -56,6 +65,26 @@ export default function AdminDashboard() {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear().toString().slice(-2);
         return `${day}/${month}/${year}`;
+    };
+
+    const fetchTransactions = async (userData) => {
+        setLoadingTransactions(true); // Set loading state to true while fetching transactions
+        if (userData && userData.investmentTransactions) {
+            try {
+                const transactions = await Promise.all(userData.investmentTransactions.map(async (transactionId) => {
+                    const transactionRef = doc(db, 'paymentApprovalRequests', transactionId);
+                    const transactionDoc = await getDoc(transactionRef);
+                    return transactionDoc.data();
+                }));
+                const sortedTransactions = transactions.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
+                setSelectedUserTransactions(sortedTransactions);
+            } catch (error) {
+                console.error('Error fetching transactions:', error);
+                setSelectedUserTransactions([]); // Set transactions to empty array in case of error
+            } finally {
+                setLoadingTransactions(false); // Set loading state to false after fetching transactions
+            }
+        }
     };
 
     // Render Skeleton while loading
@@ -73,7 +102,7 @@ export default function AdminDashboard() {
                     <div className='my-5'>
                         <ul className="list-group">
                             {usersData.map((user, index) => {
-                                const userCreatedAt = new Date(user.createdAt._seconds * 1000);
+                                const userCreatedAt = user.createdAt ? new Date(user.createdAt._seconds * 1000) : null;
                                 const daysSinceCreation = differenceInDays(userCreatedAt, currentDate);
                                 const isNewUser = daysSinceCreation < 7;
 
@@ -116,31 +145,33 @@ export default function AdminDashboard() {
                         <div className='details'>
                             <h5>Personal Details</h5>
                             <hr />
-                            <p>Registration Date : {formatDate(new Date(selectedUser.createdAt._seconds * 1000))}</p>
+                            {selectedUser.createdAt && (
+                                <p>Registration Date: {formatDate(new Date(selectedUser.createdAt._seconds * 1000))}</p>
+                            )}
                             <p>Name : {selectedUser.name}</p>
                             <p>KYC : {selectedUser.kycDone ? "DONE" : "NOT DONE"}</p>
-                            {selectedUser.kycDone && 
-                            <div>
-                                <p>
-                                    Aadhar Card : <a className='btn btn-success' href={selectedUser.documentUrl} download target="_blank">
-                                        Download PDF
-                                    </a>
-                                </p>
-                                <p>
-                                    Pan Card : <a className='btn btn-success' href={selectedUser.documentUrl2} download target="_blank">
-                                        Download PDF
-                                    </a>
-                                </p>
-                                <p>
-                                    Account Number : {selectedUser.accountNumber}
-                                </p>
-                                <p>
-                                    IFSC Code : {selectedUser.ifscCode}
-                                </p>
-                                <p>
-                                    Card Holder Name : {selectedUser.cardholderName}
-                                </p>
-                            </div>
+                            {selectedUser.kycDone &&
+                                <div>
+                                    <p>
+                                        Aadhar Card : <a className='btn btn-success' href={selectedUser.documentUrl} download target="_blank">
+                                            Download PDF
+                                        </a>
+                                    </p>
+                                    <p>
+                                        Pan Card : <a className='btn btn-success' href={selectedUser.documentUrl2} download target="_blank">
+                                            Download PDF
+                                        </a>
+                                    </p>
+                                    <p>
+                                        Account Number : {selectedUser.accountNumber}
+                                    </p>
+                                    <p>
+                                        IFSC Code : {selectedUser.ifscCode}
+                                    </p>
+                                    <p>
+                                        Card Holder Name : {selectedUser.cardholderName}
+                                    </p>
+                                </div>
                             }
                             <br />
                             <h5>Contact Details</h5>
@@ -151,34 +182,42 @@ export default function AdminDashboard() {
                             <hr />
                             <p>Invested Amount : ₹ {selectedUser.investedAmount}</p>
                             <p>Investment Transactions :</p>
-                            {selectedUser.investmentTransactions && selectedUser.investmentTransactions.length > 0 ? (
-                                <table className="table table-responsive my-3">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Sr. No.</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Transaction ID</th>
-                                            <th scope="col">Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {selectedUser.investmentTransactions.map((transaction, index) => {
-                                            const date = new Date(transaction.date._seconds * 1000);
-                                            const formatedDate = formatDate(date);
-                                            return (
-                                                <tr key={index} className="profile-card">
-                                                    <td>{index + 1}.</td>
-                                                    <td>₹ {transaction.amount}</td>
-                                                    <td>{transaction.transactionId.substring(0, transaction.transactionId.length / 2) + ' ' + transaction.transactionId.substring(transaction.transactionId.length / 2)}</td>
-                                                    <td>{formatedDate}</td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
+                            {loadingTransactions ? (
+                                <p>Loading investment transactions...</p>
                             ) : (
-                                <p className="mx-3">No investment transactions available</p>
-                            )}
+                                selectedUserTransactions && selectedUserTransactions.length > 0 ? (
+                                    <>
+                                        <ul className="payment-list-group">
+                                            {selectedUserTransactions.map((transaction, index) => (
+                                                <li
+                                                    key={index}
+                                                    className='payment-item d-flex justify-content-between align-items-center'
+                                                    style={{ border: '2px solid black' }}
+                                                >
+                                                    <h6 style={{ paddingRight: '10px' }}>{index + 1} .</h6>
+                                                    <div className="payment-item-details">
+                                                        <p className="payment-item-name"><strong>UTR No:</strong> {transaction.UTR}</p>
+                                                        <p className="payment-item-name"><strong>Amount:</strong> ₹ {transaction.amount}</p>
+                                                        <p className="payment-item-name"><strong>Status:</strong> {
+                                                            transaction.status === 'pending' ? <>Pending  <i class="fas fa-clock-o" aria-hidden="true"></i>
+                                                            </>
+                                                                :
+                                                                (transaction.status === 'accepted' ? <>Accepted  <i class="fas fa-check-circle-o" aria-hidden="true"></i>
+                                                                </> :
+                                                                    <>Rejected  <i class="fas fa-times" aria-hidden="true"></i>
+                                                                    </>
+                                                                )}
+                                                        </p>
+                                                        <p className="payment-item-name"><strong>Date:</strong> {formatDate(transaction.createdAt.toDate())}</p>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                ) : (
+                                    <p className="mx-3">No investment transactions available</p>
+
+                                ))}
                             <br />
                             <h5>Income Details</h5>
                             <hr />

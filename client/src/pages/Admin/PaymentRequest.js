@@ -10,6 +10,8 @@ import { formatDate } from './FormatDate.js';
 export default function PaymentRequest() {
     const [paymentRequests, setPaymentRequests] = useState([]);
     const [selectedPaymentRequest, setSelectedPaymentRequest] = useState(null);
+    const [acceptButtonLoading, setAcceptButtonLoading] = useState(false); // Add loading state for accept button
+    const [rejectButtonLoading, setRejectButtonLoading] = useState(false); // Add loading state for reject button
     const [showModal, setShowModal] = useState(false);
     const history = useNavigate();
 
@@ -35,6 +37,8 @@ export default function PaymentRequest() {
 
     const handleAccept = async (userId, amount, request) => {
         // Implement logic for accepting payment request
+        if (acceptButtonLoading) return;
+        setAcceptButtonLoading(true); // Set loading state to true when accept button is clicked
         let investedAmount = Number(amount);
         try {
             // Update the status to "accepted" in Firestore
@@ -76,10 +80,15 @@ export default function PaymentRequest() {
             ));
         } catch (error) {
             console.error('Error updating user info:', error);
+        } finally {
+            setAcceptButtonLoading(false); // Reset loading state after action is completed
         }
     };
 
     const handleReject = async (userId, amount, request) => {
+        if (rejectButtonLoading) return;
+        setRejectButtonLoading(true); // Set loading state to true when reject button is clicked
+
         try {
             // Update the status to "rejected" in Firestore
             await updateDoc(doc(db, 'paymentApprovalRequests', request.id), {
@@ -107,12 +116,15 @@ export default function PaymentRequest() {
                 }).then((res) => {
                     console.log("email-sent succesfully");
                 })
-                .catch((error) => {
-                    console.log("failed sending email", error);
-                })
+                    .catch((error) => {
+                        console.log("failed sending email", error);
+                    })
             }
         } catch (error) {
             console.error('Error rejecting payment request:', error);
+        }
+        finally {
+            setRejectButtonLoading(false);
         }
     };
 
@@ -158,8 +170,8 @@ export default function PaymentRequest() {
                             <div>
                                 {request.status === 'pending' && (
                                     <>
-                                        <Button variant="success" className="me-2" onClick={() => handleAccept(request.userId, request.amount, request)}>Accept</Button>
-                                        <Button variant="danger" onClick={() => handleReject(request.userId, request.amount, request)}>Reject</Button>
+                                        <Button variant="success" className="me-2" onClick={() => handleAccept(request.userId, request.amount, request)} disabled={acceptButtonLoading}>Accept</Button>
+                                        <Button variant="danger" onClick={() => handleReject(request.userId, request.amount, request)} disabled={rejectButtonLoading}>Reject</Button>
                                     </>
                                 )}
                                 {request.status === 'accepted' && (

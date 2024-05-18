@@ -11,6 +11,9 @@ export default function WithdrawalRequest() {
     const [withdrawalRequests, setWithdrawalRequests] = useState([]);
     const [selectedWithdrawalRequest, setSelectedWithdrawalRequest] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [acceptButtonLoading, setAcceptButtonLoading] = useState(false); // Add loading state for accept button
+    const [rejectButtonLoading, setRejectButtonLoading] = useState(false); // Add loading state for reject button
+
     const history = useNavigate();
 
     useEffect(() => {
@@ -35,6 +38,9 @@ export default function WithdrawalRequest() {
 
     const handleAccept = async (userId, amount, request) => {
         // Implement logic for accepting withdrawal request
+        if (acceptButtonLoading) return; // If button is already loading, prevent further action
+        setAcceptButtonLoading(true); // Set loading state to true when accept button is clicked
+
         let balance = -1 * Number(amount);
         try {
             // Update the status to "accepted" in Firestore
@@ -75,10 +81,15 @@ export default function WithdrawalRequest() {
             ));
         } catch (error) {
             console.error('Error updating user balance:', error);
+        } finally{
+            setAcceptButtonLoading(false);
         }
     };
 
     const handleReject = async (userId, amount, request) => {
+        if (rejectButtonLoading) return; // If button is already loading, prevent further action
+        setRejectButtonLoading(true); // Set loading state to true when reject button is clicked
+
         try {
             // Update the status to "rejected" in Firestore
             await updateDoc(doc(db, 'withdrawalApprovalRequests', request.id), {
@@ -111,6 +122,8 @@ export default function WithdrawalRequest() {
             }
         } catch (error) {
             console.error('Error rejecting withdrawal request:', error);
+        } finally{
+            setRejectButtonLoading(false);
         }
     };
 
@@ -152,8 +165,8 @@ export default function WithdrawalRequest() {
                             <div>
                                 {request.status === 'pending' && (
                                     <>
-                                        <Button variant="success" className="me-2" onClick={() => handleAccept(request.userId, request.amount, request)}>Accept</Button>
-                                        <Button variant="danger" onClick={() => handleReject(request.userId, request.amount, request)}>Reject</Button>
+                                        <Button variant="success" className="me-2" onClick={() => handleAccept(request.userId, request.amount, request)} disabled={acceptButtonLoading}>Accept</Button>
+                                        <Button variant="danger" onClick={() => handleReject(request.userId, request.amount, request)} disabled={rejectButtonLoading}>Reject</Button>
                                     </>
                                 )}
                                 {request.status === 'accepted' && (
