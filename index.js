@@ -56,152 +56,6 @@ const mg = mailgun.client({
   public_key: process.env.MAILGUN_PUBLIC_KEY
 });
 
-
-// Daily update task (using async/await)
-async function updateInterestAmounts() {
-  const batch = firestore.batch();
-  const usersRef = firestore.collection('users');
-  const usersSnapshot = await usersRef.get();
-  try {
-
-
-    for (const doc of usersSnapshot.docs) {
-      const userData = doc.data();
-      const investedAmount = userData.investedAmount || 0;
-      const currentInterestAmount = userData.interestAmount || 0;
-      const currentWithdrawableAmount = userData.withdrawableAmount || 0;
-      const referralAmount = userData.referralAmount || 0;
-      let totalReferralAddition = 0;
-
-      const referralUsersArray = userData.referralUsers || [];
-      for (const referralUser of referralUsersArray) {
-        const referralUserDoc = await firestore.collection('users').doc(referralUser).get();
-        const referralUserDocData = referralUserDoc.data();
-        const referralUserInvestedAmount = referralUserDocData.investedAmount || 0;
-        totalReferralAddition += referralUserInvestedAmount * 0.003;
-
-        const childOfChildReferralUsersArray = referralUserDocData.referralUsers || [];
-        for (const childOfChildReferralUser of childOfChildReferralUsersArray) {
-          const childOfChildreferralUserDoc = await firestore.collection('users').doc(childOfChildReferralUser).get();
-          const childOfChildreferralUserDocData = childOfChildreferralUserDoc.data();
-          const childOfChildreferralUserInvestedAmount = childOfChildreferralUserDocData.investedAmount || 0;
-          totalReferralAddition += childOfChildreferralUserInvestedAmount * 0.002;
-
-          const childOfChildOfChildReferralUsersArray = childOfChildreferralUserDocData.referralUsers || [];
-          for (const childOfChildOfChildReferralUser of childOfChildOfChildReferralUsersArray) {
-            const childOfChildOfChildreferralUserDoc = await firestore.collection('users').doc(childOfChildOfChildReferralUser).get();
-            const childOfChildOfChildreferralUserDocData = childOfChildOfChildreferralUserDoc.data();
-            const childOfChildOfChildreferralUserInvestedAmount = childOfChildOfChildreferralUserDocData.investedAmount || 0;
-            totalReferralAddition += childOfChildOfChildreferralUserInvestedAmount * 0.001;
-
-          }
-        }
-
-      }
-
-      const interestUpdate = investedAmount * 0.012;
-      const newInterestAmount = currentInterestAmount + interestUpdate;
-      const newReferralAmount = referralAmount + totalReferralAddition;
-      const newWithdrawableAmount = currentWithdrawableAmount + interestUpdate + totalReferralAddition;
-
-      batch.set(doc.ref, {
-        interestAmount: newInterestAmount,
-        withdrawableAmount: newWithdrawableAmount,
-        referralAmount: newReferralAmount,
-      }, { merge: true });
-    }
-
-    await batch.commit();
-    console.log('Interest amounts updated successfully!');
-  } catch (error) {
-    console.error('Error updating interest amounts:', error);
-  }
-}
-
-async function updateInvestedAmount() {
-  try {
-    const usersSnapshot = await firestore.collection('users').get();
-
-    // Iterate through each user
-    for (const userDoc of usersSnapshot.docs) {
-      const userData = userDoc.data();
-      const userId = userDoc.id;
-      const { investedAmount, investmentTransactions } = userData;
-
-      let updatedInvestedAmount = investedAmount;
-      let updatedTransactionsArray = investmentTransactions;
-
-      // Iterate through each investment transaction
-      for (const transaction of updatedTransactionsArray) {
-        // Check if the transaction is older than 1 year
-        const transactionDate = moment(transaction.date.toDate());
-        const oneYearAgo = moment().subtract(1, 'day');
-
-        if (transactionDate.isBefore(oneYearAgo) && !transaction.investedAmountUpdated) {
-          // Subtract the transaction amount from the invested amount
-          updatedInvestedAmount -= transaction.amount;
-
-          // Update the transaction in the investmentTransactions array
-          const updatedTransactions = updatedTransactionsArray.map((t) => {
-            if (t.transactionId === transaction.transactionId) {
-              return { ...t, investedAmountUpdated: true };
-            }
-            return t;
-          });
-
-          updatedTransactionsArray = updatedTransactions;
-
-          // Update the user document in Firestore
-          await firestore.collection('users').doc(userId).update({
-            investedAmount: updatedInvestedAmount,
-            investmentTransactions: updatedTransactions,
-          });
-
-        }
-      }
-    }
-
-    console.log('InvestedAmount updated successfully');
-  } catch (error) {
-    console.error('Error updating investedAmount:', error);
-  }
-}
-
-
-// const task = cron.schedule('0 0 * * *', updateInterestAmounts, {
-//   scheduled: true,
-//   timezone: "Asia/Kolkata"
-// }); 
-// const task_2 = cron.schedule('0 0 * * *', updateInvestedAmount, {
-//   scheduled: true,
-//   timezone: "Asia/Kolkata"
-// }); 
-
-const task = new CronJob('30 0 * * *', updateInterestAmounts, null, true, 'Asia/Kolkata');
-
-const task_2 = new CronJob('35 0 * * *', updateInvestedAmount, null, true, 'Asia/Kolkata');
-
-
-// Optional: Start the scheduled task immediately for testing purposes (comment out for production)
-task.start();
-task_2.start();
-
-const cronJobs = [task, task_2];
-
-// Function to check and restart cron jobs if necessary
-const monitorCronJobs = () => {
-  for (const job of cronJobs) {
-    if (!job.running) {
-      job.start();
-      console.log(`Cron job restarted.`);
-    }
-  }
-};
-
-// Start the monitoring loop
-setInterval(monitorCronJobs, 6000000); // Check every 100 minute (adjust as needed)
-
-
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
@@ -318,6 +172,20 @@ app.get("/api/getAllPaymentRequests", async (req, res) => {
     res.status(500).json({ error: 'Error fetching payment requests' });
   }
 });
+
+app.get("/api/getAllKYCRequests", async (req, res) => {
+  try {
+    const kycsRef = firestore.collection('KYCApprovalRequests');
+    const snapshot = await kycsRef.get();
+    const kycs = snapshot.docs.map(doc => {
+      return { id: doc.id, ...doc.data() }; // Include document ID in the response
+    });
+    res.json(kycs);
+  } catch (error) {
+    console.error('Error fetching KYC requests:', error);
+    res.status(500).json({ error: 'Error fetching KYC requests' });
+  }
+});
 app.get("/api/getAllWithdrawalRequests", async (req, res) => {
   try {
     const usersRef = firestore.collection('withdrawalApprovalRequests');
@@ -376,15 +244,70 @@ app.get('/api/send-email-kyc/:id', async (req, res) => {
   try {
     const userEmail = req.params.id;
 
-    mg.messages
+    await mg.messages
       .create('tatainvest.org', {
         from: 'relations@tatainvest.org',
         to: userEmail,
-        subject: `KYC DONE!!!`,
-        html: `<h3>Dear user,</h3><p>We are writing to inform you that your Know Your Customer (KYC) process has been successfully completed. As a result, you now have authorization to withdraw funds from your account. You may proceed with any necessary fund withdrawals at your convenience. For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p><p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p><p>Regards,</p><p>Tata Invest Team</p>`,
+        subject: 'KYC Request Sent!!!',
+        html: `<h3>Dear user,</h3>
+               <p>We are writing to inform you that your Know Your Customer (KYC) process has been sent to the admin for verification. We will let you know about it as soon as possible.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
+               <p>Regards,</p>
+               <p>Tata Invest Team</p>`,
       })
-      .then(msg => console.log(msg)) //success
-      .catch(err => console.log(err)); //fail;
+      .then(msg => console.log(msg)) // success
+      .catch(err => console.log(err)); // fail;
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+app.get('/api/send-email-kyc-accepted/:id', async (req, res) => {
+  try {
+    const userEmail = req.params.id;
+
+    await mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: userEmail,
+        subject: 'KYC Approval Accepted!!!',
+        html: `<h3>Dear user,</h3>
+               <p>We are writing to inform you that your Know Your Customer (KYC) process has been accepted successfully. As a result, you now have authorization to withdraw funds from your account at your own discretion.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
+               <p>Regards,</p>
+               <p>Tata Invest Team</p>`,
+      })
+      .then(msg => console.log(msg)) // success
+      .catch(err => console.log(err)); // fail;
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+app.get('/api/send-email-kyc-rejected/:id', async (req, res) => {
+  try {
+    const userEmail = req.params.id;
+
+    await mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: userEmail,
+        subject: 'KYC Request Rejected!!!',
+        html: `<h3>Dear user,</h3>
+               <p>We are writing to inform you that your Know Your Customer (KYC) request has been rejected due to some discrepancy in the submitted data such as PAN card, Aadhaar card, bank account details, etc.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
+               <p>Regards,</p>
+               <p>Tata Invest Team</p>`,
+      })
+      .then(msg => console.log(msg)) // success
+      .catch(err => console.log(err)); // fail;
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);

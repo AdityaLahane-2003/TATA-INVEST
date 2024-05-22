@@ -19,6 +19,7 @@ const AddMoneyPage = () => {
   const [screenshot, setScreenshot] = useState(null);
   const [loading, setLoading] = useState(false);
   const [paymentRequestStatus, setPaymentRequestStatus] = useState('idle'); // New state for tracking request status
+  const [copied, setCopied] = useState(false);
 
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
@@ -87,6 +88,13 @@ const AddMoneyPage = () => {
       console.error('Error uploading screenshot:', error);
       return null;
     }
+  };
+  const copyUPI = (UPI) => {
+    navigator.clipboard.writeText("tata.invest@ybl");
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
   };
 
   const handelPaymentApprovalRequest = async () => {
@@ -158,7 +166,11 @@ const AddMoneyPage = () => {
                 <h6>Step - 1</h6><br></br>
                 <img src="/assets/qr.jpeg" alt="QR Code" className="mb-2" />
                 <br></br>
-                <strong>UPI - tata.invest@ybl</strong>
+                <strong>UPI - tata.invest@ybl</strong> {copied ? (
+                  <i className="fas fa-check-circle copied"></i>
+                ) : (
+                  <i className="far fa-copy copy-icon" onClick={copyUPI}></i>
+                )}
               </Form.Group>
               <Form.Group className="mb-3">
                 <h6>Step - 2</h6> <br></br>

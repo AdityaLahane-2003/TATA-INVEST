@@ -1,11 +1,14 @@
+.dashboard-container1 {
+    text-align: left;
+    padding: 2%;
+}
 .dashboard-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     margin-top: 2%;
-    text-align: center;
     box-shadow: 2px 2px 2px 2px grey;
-    border-radius: 10%;
+    border-radius: 2%;
 }
 
 .dashboard-title {
@@ -14,6 +17,7 @@
 }
 
 .progress-bar-container {
+    margin-top: 5%;
     margin-bottom: 20px;
 }
 .buttons-container {

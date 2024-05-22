@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from './Skeletons/SkeletonAdmin.js';
-import { db } from "../../Firebase/config.js";
+import { db, deleteDocument } from "../../Firebase/config.js";
 import { getDoc, doc } from "firebase/firestore";
 import './admin.css';
 
@@ -60,6 +60,14 @@ export default function AdminDashboard() {
         setShowModal(false);
         setSelectedUser(null);
     };
+    const handleDeleteUser = async () => {
+        try{
+            await deleteDocument("users", selectedUser.referralCode)
+        }
+        catch(err){
+            console.log("error while deleting user", err);
+        }
+    }
     const formatDate = (date) => {
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -230,12 +238,9 @@ export default function AdminDashboard() {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    {/* <Button variant="secondary" onClick={() => {
-                        console.log(selectedUser);
-                        history(`/edit-user/${selectedUser.referralCode}`)
-                    }}>
-                        Edit Details
-                    </Button> */}
+                    <Button variant="secondary" onClick={handleDeleteUser}>
+                        Delete User
+                    </Button>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
                     </Button>

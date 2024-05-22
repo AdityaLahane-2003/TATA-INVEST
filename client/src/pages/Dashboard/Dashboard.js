@@ -10,6 +10,7 @@ import { createWithdrawalApprovalRequest } from "../../Firebase/config.js";
 import WithdrawalForm from "../../components/WithdrawalForm/Withdrawalform.js";
 import axios from "axios";
 import { connectStorageEmulator } from "firebase/storage";
+import { Typography } from "@mui/material";
 
 function DashboardScreen() {
     const [userData, setUser] = useState(null);
@@ -125,11 +126,11 @@ function DashboardScreen() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     return (
-        <div className="container">
+        <div className="dashboard-container1">
             <WithdrawalForm open={formOpen} onClose={() => setFormOpen(false)} onSubmit={handleWithdrawalSubmit} />
-            <h1 className="mt-3 text-center">Hi {userData?.name}, <br /> Welcome to the TATA Invest</h1>
+            <Typography className="mt-3" variant="p" style={{textAlign:'left', fontSize:'20px'}}>Hi <strong>{userData?.name}</strong>,</Typography>
             <div className="dashboard-container">
-                <h5 style={{ fontWeight: "bold" }}>Invest and Earn</h5>
+                <Typography variant="p" style={{textAlign:'left',fontSize:'20px',marginBottom:'2%'}}><strong>Invest and Earn</strong></Typography>
                 <div className="progress-bar-container">
                     <ProgressBar investedAmount={(userData?.investedAmount || 0) + (userData?.withdrawableAmount || 0)} />
                     <h6>Invest More Upto <strong>₹ 300000</strong></h6>

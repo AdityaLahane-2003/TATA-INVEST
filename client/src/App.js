@@ -29,6 +29,7 @@ import PhoneAuth from './pages/Auth/PhoneAuth.js';
 import PaymentRequest from './pages/Admin/PaymentRequest.js';
 import EditUserDetails from './pages/Admin/EditUserDetails.js';
 import WithdrawalRequest from './pages/Admin/WithdrawalRequests.js';
+import KYCRequest from './pages/Admin/KYCRequests.js';
 import { getUser } from "./utils/getUser.js";
 import FloatingButton from './components/FloatingButton/FloatingButton.js';
 
@@ -109,6 +110,7 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/paymentrequest" element={<PaymentRequest />} />
             <Route path="/withdrawalrequest" element={<WithdrawalRequest />} />
+            <Route path="/kycrequest" element={<KYCRequest />} />
             <Route path="/edit-user/:userId" element={<EditUserDetails />} /> {/* Add route for EditUserDetails */}
           </>
         )}

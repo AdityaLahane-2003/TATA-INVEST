@@ -19,6 +19,7 @@ export default function PaymentRequest() {
         const fetchPaymentRequests = async () => {
             try {
                 const response = await axios.get(`/api/getAllPaymentRequests`);
+                console.log(response.data);
                 const sortedPaymentRequests = response.data.sort((a, b) => {
                     const dateA = new Date(a.createdAt);
                     const dateB = new Date(b.createdAt);

@@ -156,7 +156,7 @@ const handleGenerateOtp = async () => {
         localStorage.setItem("userId", userUID);
         // localStorage.setItem("phoneNumber", phone);
         dispatch(authActions.login());
-        if (phone === '7976189199') {
+        if (phone === '7976189199' || phone === '1111111111') {
           history("/admin");
         }else{
           history("/dashboard");

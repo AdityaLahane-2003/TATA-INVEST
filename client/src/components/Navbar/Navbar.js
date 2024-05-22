@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getUser } from "../../utils/getUser.js";
 import { auth } from '../../Firebase/config.js';
 import './navbar.css';
-import { Button, Drawer, List, ListItem } from '@mui/material';
+import { Button, Drawer, List, ListItem, Typography } from '@mui/material';
 
 function Navbar() {
   const history = useNavigate();
@@ -34,8 +34,8 @@ function Navbar() {
   const handleSignOut = () => {
     // auth.signOut()
     //   .then(() => {
-        localStorage.removeItem('userId');
-        history('/');
+    localStorage.removeItem('userId');
+    history('/');
     //   })
     //   .catch(error => {
     //     console.error('Error signing out:', error);
@@ -47,9 +47,9 @@ function Navbar() {
       <nav className="navbar navbar-expand-lg " data-bs-theme="dark">
 
         <div className="container-fluid ">
-        <Link to='/'>
-        <img src="assets/logo.png" alt="TataInvest" height="50" width="70" />
-        </Link>
+          <Link to='/'>
+            <img src="assets/logo.png" alt="TataInvest" height="50" width="70" />
+          </Link>
           <button className="navbar-toggler d-lg-none" type="button" onClick={toggleDrawer}>
             <i className="fa fa-bars" aria-hidden="true"></i>
           </button>
@@ -62,14 +62,16 @@ function Navbar() {
             <div className="drawer-content drawer-card" onClick={toggleDrawer}>
               <div style={{ paddingTop: '5px', paddingLeft: '15px', display: 'flex', flexDirection: 'row' }} className='drawer-header'>
                 <h3 style={{ paddingRight: '10px' }}>
-                  Hi {userData?.name}, <br /> Welcome to the <br /> <img src="assets/logo.png" alt="TataInvest" width="130" />
+                  <Typography className="mt-3" variant="p" style={{ textAlign: 'left', fontSize: '20px' }}>Hi <strong>{userData?.name}</strong>,</Typography> <br></br>
+                  <Typography className="mt-3" variant="p" style={{ textAlign: 'left', fontSize: '20px' }}>Welcome to <strong>Tata Invest</strong></Typography>
+                  {/* <img src="assets/logo.png" alt="TataInvest" width="130" /> */}
                 </h3>
                 <div className="close-icon" onClick={toggleDrawer} style={{ marginRight: '20px', marginTop: '10px' }}>
                   <i className="fas fa-times" style={{ fontSize: '34px' }}></i>
                 </div>
               </div>
               <List>
-                {userData && (userData.phone === "7976189199"|| userData.phone==='1111111111') ? (
+                {userData && (userData.phone === "7976189199" || userData.phone === '1111111111') ? (
                   <>
                     <ListItem className="list-item">
                       <Link to="/admin">
@@ -84,6 +86,11 @@ function Navbar() {
                     <ListItem className="list-item">
                       <Link to="/withdrawalrequest">
                         <i className="fas fa-person"></i> Withdrawal Requests
+                      </Link>
+                    </ListItem>
+                    <ListItem className="list-item">
+                      <Link to="/kycrequest">
+                        <i className="fas fa-person"></i> KYC Requests
                       </Link>
                     </ListItem>
                   </>
@@ -127,7 +134,7 @@ function Navbar() {
 
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
-              {userData && (userData.phone === "7976189199"|| userData.phone ==='1111111111') ? (
+              {userData && (userData.phone === "7976189199" || userData.phone === '1111111111') ? (
                 <>
                   <li className="nav-item">
                     <Link to="/admin" className="nav-link active" aria-current="page">Users</Link>
@@ -137,6 +144,9 @@ function Navbar() {
                   </li>
                   <li className="nav-item">
                     <Link to="/withdrawalrequest" className="nav-link active" aria-current="page">Withdrawal Requests</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/kycrequest" className="nav-link active" aria-current="page">KYC Requests</Link>
                   </li>
                 </>
               ) : (

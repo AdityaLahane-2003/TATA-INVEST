@@ -273,13 +273,52 @@ export const createWithdrawalApprovalRequest = async (userId, userName, phone, a
   }
 }
 
+export const deleteDocument = async (collectionName, documentId) => {
+  try {
+    // Get a reference to the document
+    const docRef = doc(db, collectionName, documentId);
 
-export const updateDocumentUrlsAndBankDetails = async (userId, downloadURL1,documentURL2,accountNumber, ifscCode, cardholderName) => {
+    // Delete the document
+    await deleteDoc(docRef);
+
+    console.log('Document deleted successfully');
+  } catch (error) {
+    console.error('Error deleting document:', error);
+  }
+};
+
+
+export const createKYCApprovalRequest = async (userId, aadharUrl,panUrl,accountNumber, ifscCode, cardholderName,email) => {
+  try {
+    // Add the payment approval request to the paymentApprovalRequests collection
+    const paymentApprovalRef = await addDoc(collection(db, "KYCApprovalRequests"), {
+      userId: userId,
+      aadharURL:aadharUrl,
+      panURL:panUrl,
+      status: 'pending',
+      accountNumber:accountNumber,
+      ifscCode:ifscCode,
+      cardHolderName:cardholderName,
+      createdAt: new Date(),
+      email:email,
+    });
+
+    // Retrieve the user document
+    // const userRef = doc(db, 'users',userId);
+
+    // await updateInvestmentTransactionsArray(userRef, paymentApprovalRef.id)
+    console.log("KYC doc created");
+  } catch (error) {
+    console.log('Error in creating payment approval request', error);
+  }
+}
+
+export const acceptKYCApprovalRequest = async (userId, aadharURL,panURL,accountNumber, ifscCode, cardholderName) => {
   try {
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, {
-      documentUrl: downloadURL1,
-      documentUrl2:documentURL2,
+      documentUrl: aadharURL,
+      documentUrl2:panURL,
       accountNumber:accountNumber,
       ifscCode:ifscCode,
       cardholderName:cardholderName,
@@ -287,6 +326,13 @@ export const updateDocumentUrlsAndBankDetails = async (userId, downloadURL1,docu
     });
 
     console.log('Document URL updated successfully');
+  } catch (error) {
+    console.error('Error updating document URL:', error);
+  }
+}
+export const rejectKYCApprovalRequest = async (userId, downloadURL1,documentURL2,accountNumber, ifscCode, cardholderName) => {
+  try {
+    console.log('KYC Approval Rejected Succesfully');
   } catch (error) {
     console.error('Error updating document URL:', error);
   }

@@ -6,7 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import ToastMessage from '../Toast/Toast.js';
 import { getUser } from '../../utils/getUser.js';
 import axios from 'axios';
-
+import { createKYCApprovalRequest } from '../../Firebase/config.js';
 
 function Step3Form() {
   const history = useNavigate();
@@ -99,9 +99,9 @@ function Step3Form() {
       const downloadURLs = await Promise.all(uploadStorageRefs.map(ref => getDownloadURL(ref)));
 
       // Update document URLs and bank details in the database
-      await updateDocumentUrlsAndBankDetails(currentUser, downloadURLs[0], downloadURLs[1], accountNumber, ifscCode, cardholderName);
+      await createKYCApprovalRequest(currentUser, downloadURLs[0], downloadURLs[1], accountNumber, ifscCode, cardholderName,user.email);
 
-      const response = await axios.get(`/api/send-email-kyc/${user.email}`); 
+      await axios.get(`/api/send-email-kyc/${user.email}`); 
       setShowToast(true);
       setLoading(false);
       setAadharCard(null);
