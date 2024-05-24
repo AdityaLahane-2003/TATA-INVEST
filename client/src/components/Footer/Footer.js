@@ -19,9 +19,9 @@ const Footer = () => {
                 </div>
                 <div className="social-links">
                     <ul>
-                        <li><a href="/#"><i className="fab fa-facebook"></i></a></li>
-                        <li><a href="/#"><i className="fab fa-twitter"></i></a></li>
-                        <li><a href="/#"><i className="fab fa-instagram"></i></a></li>
+                        <li><a href="https://www.facebook.com/tatacapital/"><i className="fab fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/tatacapital"><i className="fa-brands fa-x-twitter"></i></a></li>
+                        <li><a href="https://www.instagram.com/tatacapital/"><i className="fab fa-instagram"></i></a></li>
                     </ul>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import InvestorReviews from "../../components/InvestorReviews/InvestorReviews.js
 import { investmentPlansSlidesMobile } from "../../data.js";
 import { createWithdrawalApprovalRequest } from "../../Firebase/config.js";
 import WithdrawalForm from "../../components/WithdrawalForm/Withdrawalform.js";
+import SlidingImages from "../../components/SlidingImages/SlidingImages.js"
 import axios from "axios";
 import { connectStorageEmulator } from "firebase/storage";
 import { Typography } from "@mui/material";
@@ -128,6 +129,7 @@ function DashboardScreen() {
     return (
         <div className="dashboard-container1">
             <WithdrawalForm open={formOpen} onClose={() => setFormOpen(false)} onSubmit={handleWithdrawalSubmit} />
+            <SlidingImages/>
             <Typography className="mt-3" variant="p" style={{textAlign:'left', fontSize:'20px'}}>Hi <strong>{userData?.name}</strong>,</Typography>
             <div className="dashboard-container">
                 <Typography variant="p" style={{textAlign:'left',fontSize:'20px',marginBottom:'2%'}}><strong>Invest and Earn</strong></Typography>
