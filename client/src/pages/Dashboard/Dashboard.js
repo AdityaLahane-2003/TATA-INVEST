@@ -128,7 +128,7 @@ function DashboardScreen() {
             {isPopupVisible && (
                 <div className="popup-container">
                     <div className="popup-content">
-                        <img src="/path/to/your/image.jpg" alt="Ad" className="popup-image" />
+                        <img src="/assets/popup.png" alt="Ad" className="popup-image" />
                         <button className="close-popup-button" onClick={() => setIsPopupVisible(false)}>X</button>
                     </div>
                 </div>
