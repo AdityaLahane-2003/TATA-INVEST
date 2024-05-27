@@ -19,6 +19,7 @@ function DashboardScreen() {
     const history = useNavigate();
     const fetchedUser = localStorage.getItem('userId');
     const [formOpen, setFormOpen] = useState(false);
+    const [isPopupVisible, setIsPopupVisible] = useState(true); // State for popup visibility
 
     useEffect(() => {
         if (fetchedUser) {
@@ -40,24 +41,20 @@ function DashboardScreen() {
 
     const handelWithdrawalApprovalRequest = () => {
         if (!userData) {
-            // If user data is not available, redirect to login
             history('/login');
             return;
         }
     
         if (!userData.kycDone) {
-            // If KYC is not done, show alert message
             alert("Your KYC is not done. Please complete KYC to withdraw money.");
             console.log("withdraw button clicked");
             return;
         }
     
-        // Open withdrawal form
         setFormOpen(true);
         console.log("withdraw button clicked");
     };
     
-
     const handleWithdrawalSubmit = async (amount) => {
         console.log("withdrawal-amount", amount);
         if (!userData.kycDone) {
@@ -128,6 +125,14 @@ function DashboardScreen() {
 
     return (
         <div className="dashboard-container1">
+            {isPopupVisible && (
+                <div className="popup-container">
+                    <div className="popup-content">
+                        <img src="/path/to/your/image.jpg" alt="Ad" className="popup-image" />
+                        <button className="close-popup-button" onClick={() => setIsPopupVisible(false)}>X</button>
+                    </div>
+                </div>
+            )}
             <WithdrawalForm open={formOpen} onClose={() => setFormOpen(false)} onSubmit={handleWithdrawalSubmit} />
             <SlidingImages/>
             <Typography className="mt-3" variant="p" style={{textAlign:'left', fontSize:'20px'}}>Hi <strong>{userData?.name}</strong>,</Typography>
@@ -149,7 +154,7 @@ function DashboardScreen() {
             </div>
             <center className="slides-container leftColumnInvestment">
                 <div className="controls">
-                    <i class="fa-solid fa-backward" onClick={prevSlide}></i>
+                    <i className="fa-solid fa-backward" onClick={prevSlide}></i>
                 </div>
                 <div className="slide slide-img">
                     <img src={slides[currentIndex].url} alt="Slide" className="slide-image" onClick={() => {
@@ -157,7 +162,7 @@ function DashboardScreen() {
                     }} />
                 </div>
                 <div className="controls">
-                    <i class="fa-solid fa-forward" onClick={nextSlide}></i>
+                    <i className="fa-solid fa-forward" onClick={nextSlide}></i>
                 </div>
             </center>
             <center>
@@ -176,13 +181,13 @@ function DashboardScreen() {
             <div>
                 <div className="info-container">
                     <div className="info-card learn-more-card">
-                        <h3><i class="fa fa-line-chart" aria-hidden="true"> </i> <br />Complete Your KYC in one minute</h3>
+                        <h3><i className="fa fa-line-chart" aria-hidden="true"> </i> <br />Complete Your KYC in one minute</h3>
                         {userData?.kycDone ?
-                            <button className="btn btn-success shadow" disabled='true'>KYC DONE</button> :
+                            <button className="btn btn-success shadow" disabled={true}>KYC DONE</button> :
                             <button className="action-button shadow" onClick={completeKYCOnClick}>ACTIVATE NOW</button>}
                     </div>
                     <div className="info-card learn-more-card">
-                        <h3><i class="fa fa-usd" aria-hidden="true"> </i> <br />Know Your Earnings</h3>
+                        <h3><i className="fa fa-usd" aria-hidden="true"> </i> <br />Know Your Earnings</h3>
                         <button className="action-button shadow" onClick={() => { history('/statement') }}>LEARN MORE</button>
                     </div>
                 </div>
