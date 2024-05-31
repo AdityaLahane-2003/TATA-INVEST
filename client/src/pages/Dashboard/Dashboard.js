@@ -141,6 +141,7 @@ function DashboardScreen() {
                 <div className="progress-bar-container">
                     <ProgressBar investedAmount={(userData?.investedAmount || 0) + (userData?.withdrawableAmount || 0)} />
                     <h6>Invest More Upto <strong>₹ 300000</strong></h6>
+                    <p>*Daily returns are subject to market fluctuation, and it may vary.</p>
                 </div>
                 <center className="buttons-container mt-5">
                     <button className="add-money-button btn-1" onClick={addMoneyOnClick}>Add Money</button>

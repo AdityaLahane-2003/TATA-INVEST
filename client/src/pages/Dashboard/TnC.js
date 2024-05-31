@@ -40,6 +40,7 @@ In order to avail of the services from the Company and/or the Partners, <strong>
 <br /><br />
 <strong>OFFERS</strong>
 <br /><br />
+Per day return will vary according to market fluctuations. Deposited amount can be withdrawn by the users at any moment and return will be given based on the remaining deposit amount (let's say user deposited 12000, and next day withdrawn 5000 then coming days will provide him return based on remaining amount which is 7000)
 Company may run limited-time offers in connection with any products, either directly or in partnership with third parties. Company reserves the right to introduce, withdraw, or change the terms of any such offer at any time without prior notice. Any cashback that may be offered on Company or through other media channels is indicative and may be less than the advertised amount.
 <br /><br />
 <strong>REPRESENTATIONS, WARRANTIES AND COVENANTS</strong>
