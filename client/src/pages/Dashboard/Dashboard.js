@@ -141,7 +141,6 @@ function DashboardScreen() {
                 <div className="progress-bar-container">
                     <ProgressBar investedAmount={(userData?.investedAmount || 0) + (userData?.withdrawableAmount || 0)} />
                     <h6>Invest More Upto <strong>₹ 300000</strong></h6>
-                    <p>*Daily returns are subject to market fluctuation, and it may vary.</p>
                 </div>
                 <center className="buttons-container mt-5">
                     <button className="add-money-button btn-1" onClick={addMoneyOnClick}>Add Money</button>
@@ -153,6 +152,13 @@ function DashboardScreen() {
                     </button>
                 </center>
             </div>
+            <center>
+                <div className="card-referral" style={{marginTop:"15px"}} >
+                    <div className="card-body">
+                    <p>*Daily returns are subject to market fluctuation, and it may vary.</p>
+                    </div>
+                </div>
+            </center>
             <center className="slides-container leftColumnInvestment">
                 <div className="controls">
                     <i className="fa-solid fa-backward" onClick={prevSlide}></i>
