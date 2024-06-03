@@ -8,6 +8,9 @@ const Statement = () => {
     const [userData, setUser] = useState(null);
     const [investedAmount, setInvestedAmount] = useState(0);
     const [referralAmount, setReferralAmount] = useState(0);
+    const [interestAmount, setInterestAmount] = useState(0);
+    const [withdrawableAmount, setWithdrawableAmount] = useState(0);
+    const [lifetimeEarning,setLifetimeEarning] = useState(0);
     const [selectedOption, setSelectedOption] = useState('investments');
     const [transactionsArray, settransactionsArray] = useState([]);
     const [withdrawalsArray, setwithdrawalsArray] = useState([]);
@@ -29,8 +32,11 @@ const Statement = () => {
 
                 const userData = userDoc.data();
                 setUser(userData);
-                setInvestedAmount(userData.investedAmount);
-                setReferralAmount(userData.referralAmount);
+                setInvestedAmount(userData.investedAmount.toFixed(2));
+                setReferralAmount(userData.referralAmount.toFixed(2));
+                setInterestAmount(userData.interestAmount.toFixed(2));
+                setWithdrawableAmount(userData.withdrawableAmount.toFixed(2));
+                setLifetimeEarning((userData.interestAmount + userData.referralAmount).toFixed(2));
             } catch (error) {
                 console.error('Error fetching user data:', error);
                 setUser(null);
@@ -90,7 +96,7 @@ const Statement = () => {
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Interest Income:</p>
-                    <p className="item-value">₹ {userData?.interestAmount || 0}</p>
+                    <p className="item-value">₹ {interestAmount}</p>
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Referral Income:</p>
@@ -98,11 +104,11 @@ const Statement = () => {
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Life Time Earning:</p>
-                    <p className="item-value">₹ {referralAmount + (userData?.interestAmount || 0)}</p>
+                    <p className="item-value">₹ {lifetimeEarning}</p>
                 </div>
                 <div className="summary-item">
                     <p className="item-label">Balance Withdrawable:</p>
-                    <p className="item-value">₹ {userData?.withdrawableAmount || 0}</p>
+                    <p className="item-value">₹ {withdrawableAmount}</p>
                 </div>
             </div>
 
@@ -162,7 +168,7 @@ const Statement = () => {
                                         style={{ border: '2px solid black' }}>
                                             <h6 style={{paddingRight:'10px'}}>{index + 1} .</h6>
                                             <div className="payment-item-details">
-                                                <p className="payment-item-name"><strong>Amount:</strong> ₹ {withdrawal.amount}</p>
+                                                <p className="payment-item-name"><strong>Amount:</strong> ₹ {withdrawal.amount.toFixed(2)}</p>
                                                 <p className="payment-item-name"><strong>Status:</strong> {
                                                     withdrawal.status === 'pending' ? <>Pending  <i class="fa fa-clock-o" aria-hidden="true"></i>
                                                     </>

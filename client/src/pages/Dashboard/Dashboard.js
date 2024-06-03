@@ -64,7 +64,7 @@ function DashboardScreen() {
             alert('Minimum withdrawable amount is ₹1000');
             return;
         } else if (amount > userData.withdrawableAmount) {
-            alert('Insufficient Withdrawable Amount - Your Withdrawable Amount is ₹' + userData.withdrawableAmount);
+            alert('Insufficient Withdrawable Amount - Your Withdrawable Amount is ₹' + (userData.withdrawableAmount).toFixed(2));
             return;
         }
 
@@ -139,7 +139,7 @@ function DashboardScreen() {
             <div className="dashboard-container">
                 <Typography variant="p" style={{textAlign:'left',fontSize:'20px',marginBottom:'2%'}}><strong>Invest and Earn</strong></Typography>
                 <div className="progress-bar-container">
-                    <ProgressBar investedAmount={(userData?.investedAmount || 0) + (userData?.withdrawableAmount || 0)} />
+                    <ProgressBar investedAmount={((userData?.investedAmount) || 0) + ((userData?.withdrawableAmount) || 0)} />
                     <h6>Invest More Upto <strong>₹ 300000</strong></h6>
                 </div>
                 <center className="buttons-container mt-5">
