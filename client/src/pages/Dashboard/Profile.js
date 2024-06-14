@@ -62,6 +62,18 @@ const ProfilePage = () => {
     window.location.href = whatsappUrl;
   };
 
+  const shareEverywhere = async () => {
+    const message = `Get daily 1.2% returns on investments at Tatainvest! 💰 Invest now for hassle-free earnings. Click on the following link.`
+    const url = `https://tatainvest.org/signup?referralCode=${user.referralCode}`
+    const data = {
+      text:message,
+      url:url
+    }
+    if(window.navigator.canShare(data)){
+      await window.navigator.share(data);
+    }
+  };
+
   return (
     <div className="profile-container">
       {loading ? (
@@ -106,6 +118,7 @@ const ProfilePage = () => {
                   <i className="far fa-copy copy-icon" onClick={copyReferralCode}></i>
                 )}
                 <i className="fab fa-whatsapp share-icon" onClick={shareOnWhatsApp}></i>
+                <i class="fas fa-share" aria-hidden="true" onClick={shareEverywhere}></i>
               </li>
             </ul>
           </div>
