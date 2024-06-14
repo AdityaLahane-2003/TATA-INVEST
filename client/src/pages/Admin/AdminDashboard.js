@@ -123,7 +123,7 @@ export default function AdminDashboard() {
                                         <div>
                                             <span>{index + 1} .  {user.name}</span>
                                             <br />
-                                            <small className="text-muted">₹ {user.investedAmount} Invested</small>
+                                            <small className="text-muted">₹ {user.investedAmount.toFixed(2)} Invested</small>
                                         </div>
                                         <div>
                                             {isNewUser && (
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
                             <br />
                             <h5>Investment Details</h5>
                             <hr />
-                            <p>Invested Amount : ₹ {selectedUser.investedAmount}</p>
+                            <p>Invested Amount : ₹ {selectedUser.investedAmount.toFixed(2)}</p>
                             <p>Investment Transactions :</p>
                             {loadingTransactions ? (
                                 <p>Loading investment transactions...</p>
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
                                                     <h6 style={{ paddingRight: '10px' }}>{index + 1} .</h6>
                                                     <div className="payment-item-details">
                                                         <p className="payment-item-name"><strong>UTR No:</strong> {transaction.UTR}</p>
-                                                        <p className="payment-item-name"><strong>Amount:</strong> ₹ {transaction.amount}</p>
+                                                        <p className="payment-item-name"><strong>Amount:</strong> ₹ {transaction.amount.toFixed(2)}</p>
                                                         <p className="payment-item-name"><strong>Status:</strong> {
                                                             transaction.status === 'pending' ? <>Pending  <i class="fas fa-clock-o" aria-hidden="true"></i>
                                                             </>
@@ -229,10 +229,10 @@ export default function AdminDashboard() {
                             <br />
                             <h5>Income Details</h5>
                             <hr />
-                            <p>Interest Amount : ₹ {selectedUser.interestAmount}</p>
-                            <p>Referral Amount : ₹ {selectedUser.referralAmount}</p>
-                            <p>Lifetime Income : ₹ {selectedUser.interestAmount + selectedUser.referralAmount}</p>
-                            <p>Withdrawable Amount : ₹ {selectedUser.withdrawableAmount}</p>
+                            <p>Interest Amount : ₹ {selectedUser.interestAmount.toFixed(2)}</p>
+                            <p>Referral Amount : ₹ {selectedUser.referralAmount.toFixed(2)}</p>
+                            <p>Lifetime Income : ₹ {(selectedUser.interestAmount + selectedUser.referralAmount).toFixed(2)}</p>
+                            <p>Withdrawable Amount : ₹ {selectedUser.withdrawableAmount.toFixed(2)}</p>
                             <br />
                         </div>
                     )}
