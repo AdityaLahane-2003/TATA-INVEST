@@ -86,6 +86,7 @@ export default function AdminDashboard() {
                 }));
                 const sortedTransactions = transactions.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
                 setSelectedUserTransactions(sortedTransactions);
+                console.log(sortedTransactions[0].UTR)
             } catch (error) {
                 console.error('Error fetching transactions:', error);
                 setSelectedUserTransactions([]); // Set transactions to empty array in case of error
@@ -189,7 +190,7 @@ export default function AdminDashboard() {
                             <h5>Investment Details</h5>
                             <hr />
                             <p>Invested Amount : ₹ {selectedUser.investedAmount.toFixed(2)}</p>
-                            <p>Investment Transactions :</p>
+                            {/* <p>Investment Transactions :</p>
                             {loadingTransactions ? (
                                 <p>Loading investment transactions...</p>
                             ) : (
@@ -204,8 +205,8 @@ export default function AdminDashboard() {
                                                 >
                                                     <h6 style={{ paddingRight: '10px' }}>{index + 1} .</h6>
                                                     <div className="payment-item-details">
-                                                        <p className="payment-item-name"><strong>UTR No:</strong> {transaction.UTR}</p>
-                                                        <p className="payment-item-name"><strong>Amount:</strong> ₹ {transaction.amount.toFixed(2)}</p>
+                                                        <p className="payment-item-name"><strong>UTR No:</strong> {transaction?.UTR}</p>
+                                                        <p className="payment-item-name"><strong>Amount:</strong> ₹ {transaction.amount}</p>
                                                         <p className="payment-item-name"><strong>Status:</strong> {
                                                             transaction.status === 'pending' ? <>Pending  <i class="fas fa-clock-o" aria-hidden="true"></i>
                                                             </>
@@ -225,7 +226,7 @@ export default function AdminDashboard() {
                                 ) : (
                                     <p className="mx-3">No investment transactions available</p>
 
-                                ))}
+                                ))} */}
                             <br />
                             <h5>Income Details</h5>
                             <hr />
