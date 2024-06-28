@@ -112,7 +112,7 @@ const [userUID, setUserUID] = useState('');
         localStorage.setItem("userId", userUID);
         // localStorage.setItem("phoneNumber", data?.user.phone);
         dispatch(authActions.login());
-        if (phone === "7976189199" || phone === '1111111111') {
+        if (phone === "7976189199" || phone === '9772090543') {
           history('/admin');
         } else {
           history('/dashboard');
@@ -139,7 +139,7 @@ const [userUID, setUserUID] = useState('');
   //             localStorage.setItem("userId", data?.user.uid);
   //             localStorage.setItem("phoneNumber", data?.user.phone);
   //             dispatch(authActions.login());
-  //             if ( phone === "+917976189199" || phone ==='+911111111111') {
+  //             if ( phone === "+917976189199" || phone === '9772090543') {
   //               history('/admin');
   //             } else {
   //               history('/dashboard');
