@@ -63,7 +63,7 @@ function Navbar() {
               <div style={{ paddingTop: '5px', paddingLeft: '15px', display: 'flex', flexDirection: 'row' }} className='drawer-header'>
                 <h3 style={{ paddingRight: '10px' }}>
                   <Typography className="mt-3" variant="p" style={{ textAlign: 'left', fontSize: '20px' }}>Hi <strong>{userData?.name}</strong>,</Typography> <br></br>
-                  <Typography className="mt-3" variant="p" style={{ textAlign: 'left', fontSize: '20px' }}>Welcome to <strong>Tata Invest</strong></Typography>
+                  <Typography className="mt-3" variant="p" style={{ textAlign: 'left', fontSize: '20px' }}>Welcome to <strong>Dual Invest</strong></Typography>
                   {/* <img src="assets/logo.png" alt="TataInvest" width="130" /> */}
                 </h3>
                 <div className="close-icon" onClick={toggleDrawer} style={{ marginRight: '20px', marginTop: '10px' }}>

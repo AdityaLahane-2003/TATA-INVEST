@@ -38,7 +38,7 @@ const InvestorReviews = () => {
         </div>
         <div className="review-card">
         <h4>Exceptional Application</h4>
-          <p className="review-text">“Very secure app for investment, just go with Tata Invest ”</p>
+          <p className="review-text">“Very secure app for investment, just go with Dual Invest ”</p>
           <div className="reviewer-info">
             <span className="reviewer-name"> - SamJain255</span>
           </div>

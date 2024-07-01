@@ -18,7 +18,7 @@ function AboutUs() {
         {/* About Us Content */}
         <div className='center text-center'>
           <p style={{fontSize:19}}>
-            Welcome to our TATA Invest platform! These Terms and Conditions ("Terms") govern your access to and use of our product and services, including but not limited to investment services, referral programs, and any related features or functionalities (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms. Please read them carefully before using our platform.
+            Welcome to our Dual Invest platform! These Terms and Conditions ("Terms") govern your access to and use of our product and services, including but not limited to investment services, referral programs, and any related features or functionalities (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms. Please read them carefully before using our platform.
           </p>
         </div>
 
