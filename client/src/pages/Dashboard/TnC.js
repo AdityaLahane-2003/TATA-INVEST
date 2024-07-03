@@ -4,9 +4,9 @@ import { Container } from 'react-bootstrap';
 const TermsAndConditionsPage = () => {
   return (
     <Container>
-    <div className="text-center mb-4">
+    {/* <div className="text-center mb-4">
           <img src="https://firebasestorage.googleapis.com/v0/b/tatainvest-71bd6.appspot.com/o/logo.png?alt=media&token=47531390-01cb-40a6-9ab0-bca7f18cfec0" alt="Logo" className="img-fluid" />
-        </div>
+        </div> */}
       <h1 className="text-center mt-5 mb-4">Terms and Conditions</h1>
       <p  style={{fontSize:19}}>
       Dual Invest (“Company” “<strong>we</strong>” “<strong>us</strong>”) is a private limited company engaged in the business of facilitating a suite of services to customers through its digital platform, on software as a service model, and providing other value-added services to such customers.

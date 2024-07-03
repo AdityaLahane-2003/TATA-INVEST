@@ -8,9 +8,9 @@ function AboutUs() {
     <>
       <div className="container mt-5">
         {/* Logo */}
-        <div className="text-center mb-4">
+        {/* <div className="text-center mb-4">
           <img src="https://firebasestorage.googleapis.com/v0/b/tatainvest-71bd6.appspot.com/o/logo.png?alt=media&token=47531390-01cb-40a6-9ab0-bca7f18cfec0" alt="Logo" className="img-fluid" />
-        </div>
+        </div> */}
 
         {/* About Us Title */}
         <h2 className="text-center mb-4">About Us</h2>

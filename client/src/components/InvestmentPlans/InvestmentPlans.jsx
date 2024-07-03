@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import { investmentPlansSlidesMobile } from "../../data.js";
 // import investmentImage from '../../assets/numbers.png';
 // import investmentImageMobile from '../../assets/numbers-mobile.png';
@@ -53,7 +55,12 @@ const InvestmentPlans = () => {
       <div className="container inside-container">
         <div className="slides-container leftColumnInvestment">
           <div className="slide">
-            <img src={slides[currentIndex].url} alt="Slide" className="slide-image" />
+            <LazyLoadImage
+              src={slides[currentIndex].url}
+              alt="Slide"
+              className="slide-image"
+              effect="blur"
+            />
           </div>
           <div className="dots-container">
             {slides.map((_, index) => (

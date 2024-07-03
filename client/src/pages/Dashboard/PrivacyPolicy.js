@@ -5,7 +5,7 @@ const PrivacyPolicyPage = () => {
   return (
     <Container>
     <div className="text-center mb-4">
-          <img src="https://firebasestorage.googleapis.com/v0/b/tatainvest-71bd6.appspot.com/o/logo.png?alt=media&token=47531390-01cb-40a6-9ab0-bca7f18cfec0" alt="Logo" className="img-fluid" />
+          {/* <img src="https://firebasestorage.googleapis.com/v0/b/tatainvest-71bd6.appspot.com/o/logo.png?alt=media&token=47531390-01cb-40a6-9ab0-bca7f18cfec0" alt="Logo" className="img-fluid" /> */}
         </div>
       <h1 className="text-center mt-5 mb-4">Privacy Policy</h1>
      <p style={{fontSize:19}}>

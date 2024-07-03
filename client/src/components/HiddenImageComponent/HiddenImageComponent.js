@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import './HiddenImageComponent.css'; // Import CSS for styling
 
 const HiddenImageComponent = () => {
@@ -26,13 +28,14 @@ const HiddenImageComponent = () => {
                 <div className="left-text">
                     <h3 className='step-text-small'>Get Started in</h3>
                 </div>
-                <img
+                <LazyLoadImage
                     src="/assets/hidden-pic1.png"
                     alt="First"
                     className={`mobile-image ${isVisible ? '' : 'initial-opacity'}`} // Toggle initial opacity for first image
+                    effect="blur"
                 />
                 <div className='right-text'>
-                <br />
+                    <br />
                     <h2 className='step-text'>4 Easy Steps</h2>
                 </div>
             </div>
@@ -53,7 +56,12 @@ const HiddenImageComponent = () => {
                                     Step-1
                                 </h2>
                             </div>
-                            <img src="/assets/hidden-pic2.png" alt="Second" className="mobile-image" />
+                            <LazyLoadImage
+                                src="/assets/hidden-pic2.png"
+                                alt="Second"
+                                className="mobile-image"
+                                effect="blur"
+                            />
                             <div className="right-text">
                                 <h2 className='step-text'>
                                     Sign-Up
@@ -68,7 +76,12 @@ const HiddenImageComponent = () => {
                             <div className="left-text"><h2 className='step-text' style={{opacity:'0.5'}}>
                                 Step-2
                             </h2></div>
-                            <img src="/assets/hidden-pic3.png" alt="Third" className="mobile-image" />
+                            <LazyLoadImage
+                                src="/assets/hidden-pic3.png"
+                                alt="Third"
+                                className="mobile-image"
+                                effect="blur"
+                            />
                             <div className="right-text">
                                 <h2 className='step-text'>
                                     Add details
@@ -84,7 +97,12 @@ const HiddenImageComponent = () => {
                             <div className="left-text"><h2 className='step-text' style={{opacity:'0.5'}}>
                                 Step-3
                             </h2></div>
-                            <img src="/assets/hidden-pic4.png" alt="Fourth" className="mobile-image" />
+                            <LazyLoadImage
+                                src="/assets/hidden-pic4.png"
+                                alt="Fourth"
+                                className="mobile-image"
+                                effect="blur"
+                            />
                             <div className="right-text">
                                 <h2 className='step-text'>
                                     Select tier
@@ -99,7 +117,12 @@ const HiddenImageComponent = () => {
                             <div className="left-text"><h2 className='step-text' style={{opacity:'0.5'}}>
                                 Step-4
                             </h2></div>
-                            <img src="/assets/hidden-pic5.png" alt="Fifth" className="mobile-image" />
+                            <LazyLoadImage
+                                src="/assets/hidden-pic5.png"
+                                alt="Fifth"
+                                className="mobile-image"
+                                effect="blur"
+                            />
                             <div className="right-text">
                                 <h2 className='step-text'>
                                     Start earning!
